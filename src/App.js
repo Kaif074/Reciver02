@@ -429,7 +429,7 @@ function App() {
         {renderContent()}
       </div>
 
-      <style jsx>{`
+      <style>{`
         * {
           margin: 0;
           padding: 0;
