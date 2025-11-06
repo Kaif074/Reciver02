@@ -241,7 +241,7 @@ function LoadingScreen({ progress }) {
 // ==================== MAIN APP COMPONENT ====================
 function App() {
   const [messages, setMessages] = useState([]);
-  const [receiverState, setReceiverState] = useState('intro');
+  const [receiverState, setReceiverState] = useState('welcome'); // Start with 'welcome'
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [messageVisible, setMessageVisible] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -269,7 +269,16 @@ function App() {
   // ==================== INTRO & LOADING SEQUENCE ====================
   useEffect(() => {
     const sequence = async () => {
+      // Show "Welcome" for 3 seconds
+      setMessageVisible(true);
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      // Fade out
+      setMessageVisible(false);
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       // Show "RADIATRON X-9 DRS" for 10 seconds
+      setReceiverState('intro');
       setMessageVisible(true);
       await new Promise(resolve => setTimeout(resolve, 10000));
       
@@ -332,6 +341,15 @@ function App() {
 
   // ==================== RENDER CURRENT CONTENT ====================
   const renderContent = () => {
+    if (receiverState === 'welcome') {
+      return (
+        <div className={`message-display ${messageVisible ? 'visible' : ''}`}>
+          <div className="welcome-title">Welcome</div>
+          <div className="pulse-line"></div>
+        </div>
+      );
+    }
+
     if (receiverState === 'intro') {
       return (
         <div className={`message-display ${messageVisible ? 'visible' : ''}`}>
@@ -457,6 +475,20 @@ function App() {
 
         .message-display.visible {
           opacity: 1;
+        }
+
+        .welcome-title {
+          font-size: 72px;
+          font-weight: bold;
+          text-transform: uppercase;
+          letter-spacing: 8px;
+          color: lime;
+          text-shadow: 
+            0 0 20px lime,
+            0 0 40px lime,
+            0 0 60px lime,
+            0 0 80px rgba(0, 255, 0, 0.5);
+          animation: pulse 2s ease-in-out infinite;
         }
 
         .radiatron-title, .rscope-title {
